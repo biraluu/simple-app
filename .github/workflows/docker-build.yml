@@ -26,7 +26,7 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_USERNAME }}/simple-app:${{github.run_id }}
 
-    # Checkout the simple-app-devops repository
+    # Checkout the simple-app-devops repository..
     - name: Checkout simple-app-devops Repo
       uses: actions/checkout@v3
       with:
