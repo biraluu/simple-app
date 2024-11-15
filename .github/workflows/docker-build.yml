@@ -24,4 +24,30 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/simple-app:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/simple-app:${{github.run_id }}
+
+    # Checkout the simple-app-devops repository
+    - name: Checkout simple-app-devops Repo
+      uses: actions/checkout@v3
+      with:
+        repository: biraluu/simple-app-devops
+        token: ${{ secrets.PAT_TOKEN }}
+        path: simple-app-devops
+
+    # Update Kubernetes Manifest with New Image
+    - name: Update Kubernetes Manifest
+      run: |
+        IMAGE_TAG=${{ github.run_id }}
+        yq -i '.spec.template.spec.containers[0].image = "biraluu/simple-app:" + env.IMAGE_TAG' simple-app-devops/simple-app-deployment.yaml
+
+    # Commit Updated Manifest to simple-app-devops
+    - name: Commit Changes to simple-app-devops
+      run: |
+        cd simple-app-devops
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git add simple-app-deployment.yaml
+        git commit -m "Update image to biraluu/simple-app:${{ github.run_id }}"
+        git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
