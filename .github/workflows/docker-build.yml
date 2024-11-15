@@ -33,10 +33,11 @@ jobs:
         repository: biraluu/simple-app-devops
         token: ${{ secrets.PAT_TOKEN }}
         path: simple-app-devops
+        
     - name: Update Kubernetes Manifest
       run: |
         IMAGE_TAG=${{ github.run_id }}
-        yq -i '.spec.template.spec.containers[0].image = "biraluu/simple-app:" + strenv("IMAGE_TAG")' simple-app-devops/simple-app-deployment.yml
+        sed -i "s|image: biraluu/simple-app:.*|image: biraluu/simple-app:${IMAGE_TAG}|" simple-app-devops/simple-app-deployment.yml
       
   
 
