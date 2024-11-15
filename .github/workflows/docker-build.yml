@@ -36,7 +36,7 @@ jobs:
     - name: Update Kubernetes Manifest
       run: |
         IMAGE_TAG=${{ github.run_id }}
-        yq -i '.spec.template.spec.containers[0].image = "biraluu/simple-app:" + strenv(IMAGE_TAG)' simple-app-devops/simple-app-deployment.yml
+        yq -i '.spec.template.spec.containers[0].image = "biraluu/simple-app:" + strenv("IMAGE_TAG")' simple-app-devops/simple-app-deployment.yml
       
   
 
