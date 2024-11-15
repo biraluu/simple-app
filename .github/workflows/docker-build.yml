@@ -35,10 +35,11 @@ jobs:
         path: simple-app-devops
 
     # Update Kubernetes Manifest with New Image
-    - name: Update Kubernetes Manifest
+    - name: Replace Placeholder in Manifest
       run: |
         IMAGE_TAG=${{ github.run_id }}
-        yq -i '.spec.template.spec.containers[0].image = "biraluu/simple-app:" + strenv(IMAGE_TAG)' simple-app-devops/simple-app-deployment.yml
+        sed -i "s/{{IMAGE_TAG}}/${IMAGE_TAG}/g" simple-app-devops/simple-app-deployment.yml
+  
 
     # Commit Updated Manifest to simple-app-devops
     - name: Commit Changes to simple-app-devops
