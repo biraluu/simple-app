@@ -40,7 +40,7 @@ jobs:
       
   
 
-    # Commit Updated Manifest to simple-app-devops
+    # Commit Updated Manifest to simple-app-devops..
     - name: Commit Changes to simple-app-devops
       run: |
         cd simple-app-devops
